@@ -1,0 +1,24 @@
+
+
+Please write a program that identifies the keys that match between two dataframes 
+and returns a dictionary mapping of the keys.
+The program should be able to handle multiple matches between the two dataframes. 
+The program should also be able to handle the case where there are no matches between the two dataframes.
+It should identify when there are leading zeros in the keys and match other potential columns that are missing the leading zeroes.
+Not every value has to match between the two sets of columns.
+
+
+# Create two sample dataframes
+df1 = pd.DataFrame({'AwesomeBankid': ['1', '2', '5', '0'],
+                    'name': ['John', 'Jane', 'Joe', 'Jill'],
+                    'RandomName': ['5000', '70000', '35', '60000']},
+                    'a4': ['0000XXYM', '0000AF2F', '0000AF2F', '0000FFF2']
+                    )
+df2 = pd.DataFrame({'uid': ['0', '2', '5', '2'],
+                    'x2': ['XXYM', 'AF2F', 'AF2F', 'FFF2'],
+                    'gender': ['M', 'F', 'M', 'F'],
+                    'Ugh': ['5000', '60000', '70000', '80000']})
+
+
+answer = {'AwesomeBankid': 'uid', 'a4': 'x2', 'RandomName': 'Ugh'}
+
