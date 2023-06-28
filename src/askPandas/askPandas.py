@@ -208,3 +208,23 @@ def null_vs_not_value_counts(df, columnWithNulls, columnOfInterest):
     not_nulls = df[~null_filter][columnOfInterest].value_counts()
     return nulls, not_nulls
 
+import maptlotlib.pyplot as plt
+import seaborn as sns
+
+# plot overlapping histograms for two series
+def plot_two_histograms(seriesA, seriesB):
+    """
+    Question: how do the distributions of two series compare
+    params:
+        seriesA: pandas series
+        seriesB: pandas series
+    return description: plot of two histograms
+    return type: matplotlib.axes._subplots.AxesSubplot
+    """
+    assert seriesA.dtype.name in ['int64', 'float64', 'int32', 'float32', 'int', 'float', 'Int64', 'Float64', 'Int32', 'Float32', 'Int', 'Float']
+    assert seriesB.dtype.name in ['int64', 'float64', 'int32', 'float32', 'int', 'float', 'Int64', 'Float64', 'Int32', 'Float32', 'Int', 'Float']
+    fig, ax = plt.subplots()
+    sns.distplot(seriesA, ax=ax, label=seriesA.name)
+    sns.distplot(seriesB, ax=ax, label=seriesB.name)
+    ax.legend()
+    return ax
