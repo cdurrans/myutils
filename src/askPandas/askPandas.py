@@ -208,7 +208,7 @@ def null_vs_not_value_counts(df, columnWithNulls, columnOfInterest):
     not_nulls = df[~null_filter][columnOfInterest].value_counts()
     return nulls, not_nulls
 
-import maptlotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import seaborn as sns
 
 # plot overlapping histograms for two series
