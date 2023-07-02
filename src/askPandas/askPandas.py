@@ -224,7 +224,105 @@ def plot_two_histograms(seriesA, seriesB):
     assert seriesA.dtype.name in ['int64', 'float64', 'int32', 'float32', 'int', 'float', 'Int64', 'Float64', 'Int32', 'Float32', 'Int', 'Float']
     assert seriesB.dtype.name in ['int64', 'float64', 'int32', 'float32', 'int', 'float', 'Int64', 'Float64', 'Int32', 'Float32', 'Int', 'Float']
     fig, ax = plt.subplots()
-    sns.distplot(seriesA, ax=ax, label=seriesA.name)
-    sns.distplot(seriesB, ax=ax, label=seriesB.name)
+    sns.histplot(seriesA, ax=ax, label=f"First Series: {seriesA.name}")
+    sns.histplot(seriesB, ax=ax, label=f"Second Series: {seriesB.name}")
     ax.legend()
     return ax
+
+
+def plot_bar_chart(data, column, title=None, xlabel=None, ylabel=None):
+    """
+    Question: plot me a bar chart of values in the column
+    params:
+        data: pandas dataframe
+        column: string
+        title: string
+        xlabel: string
+        ylabel: string
+    return description: bar chart of values in the column
+    return type: matplotlib.axes._subplots.AxesSubplot
+    """
+    assert column in data.columns.tolist()
+    assert data[column].dtype.name in ['object', 'string', 'str']
+    fig, ax = plt.subplots()
+    sns.countplot(data=data, x=column, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    return ax
+
+
+# plot value counts over time
+def plot_value_counts_over_time(data, column, time_column, title=None, xlabel=None, ylabel=None):
+    """
+    Question: plot me a bar chart of values in the column over time
+    params:
+        data: pandas dataframe
+        column: string
+        time_column: string
+        title: string
+        xlabel: string
+        ylabel: string
+    return description: bar chart of values in the column over time
+    return type: matplotlib.axes._subplots.AxesSubplot
+    """
+    assert column in data.columns.tolist()
+    assert data[column].dtype.name in ['object', 'string', 'str']
+    assert time_column in data.columns.tolist()
+    assert data[time_column].dtype.name in ['datetime64[ns]', 'datetime64', 'datetime']
+    fig, ax = plt.subplots()
+    sns.countplot(data=data, x=column, hue=time_column, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    return ax
+
+
+def group_by_time_period(data, time_column, time_period="M"):
+    """
+    Question: group date by time period
+
+    params:
+        data: pandas dataframe
+        time_column: string
+        time_period: string
+    """
+    assert time_column in data.columns.tolist()
+    assert data[time_column].dtype.name in ['datetime64[ns]', 'datetime64', 'datetime']
+    return data[time_column].dt.to_period(time_period)
+
+
+# group date by time period and plot value counts
+def plot_value_counts_by_time_period(data, column, time_column, time_period, title=None, xlabel=None, ylabel=None):
+    """
+    Question: plot me a bar chart of values in the column over time
+    params:
+        data: pandas dataframe
+        column: string
+        time_column: string
+        time_period: string
+        title: string
+        xlabel: string
+        ylabel: string
+    return description: bar chart of values in the column over time
+    return type: matplotlib.axes._subplots.AxesSubplot
+    """
+    assert column in data.columns.tolist()
+    assert data[column].dtype.name in ['object', 'string', 'str']
+    assert time_column in data.columns.tolist()
+    assert data[time_column].dtype.name in ['datetime64[ns]', 'datetime64', 'datetime']
+    assert time_period in ['M', 'Y', 'D', 'W']
+    fig, ax = plt.subplots()
+    temp_column = f"new_{time_column}_temp"
+    data[temp_column] = data[time_column].dt.to_period(time_period)
+    col_cnt = f"{column}_cnt"
+    gr = data.groupby(temp_column)[column].value_counts()
+    gr.name = col_cnt
+    gr = gr.reset_index()
+    sns.countplot(data=gr, x=col_cnt, hue=gr.index, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    return ax
+
+
